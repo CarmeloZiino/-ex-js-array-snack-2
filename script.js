@@ -68,8 +68,7 @@ const availableBooks = books.filter((b) => b.available);
 console.log(availableBooks);
 
 const discountedBooks = availableBooks.map((b) => {
-  const finalPrice =
-    parseInt(b.price.replace(/[€\s]/g, "")) * 0.8;
+  const finalPrice = parseInt(b.price.replace(/[€\s]/g, "")) * 0.8;
   b.price = `${finalPrice} €`;
   return b;
 });
@@ -105,19 +104,19 @@ Creare un array (ages) che contiene le età degli autori dei libri.
 Calcola la somma delle età (agesSum) usando reduce.
 Stampa in console l’età media degli autori dei libri.*/
 
-const ages = books.map( b => b.author.age)
-console.log(ages)
+const ages = books.map((b) => b.author.age);
+console.log(ages);
 
-const agesSum = ages.reduce( (acc , num) => acc + num)
-console.log(`La media dell'età dell'autore è ${agesSum / 4} anni`)
+const agesSum = ages.reduce((acc, num) => {
+  return acc + num;
+}, 0);
+console.log(`La media dell'età dell'autore è ${agesSum / ages.length} anni`);
 
 /* Snack 5 (Bonus) - Raccogli i libri
 Nota: a differenza di quanto visto finora negli esempi, per accedere all'API utilizzare utilizzare l'url base:
 https://boolean-spec-frontend.vercel.app/freetestapi
 al posto di:
 https://freetestapi.com/api/v1
-
-
 
 Ad esempio:
 https://boolean-spec-frontend.vercel.app/freetestapi/users
@@ -127,7 +126,24 @@ usa la combinazione di .map() e Promise.all(), per creare una funzione (getBooks
 che a partire da un array di id (ids), ritorna una promise che risolve un array di libri (books).
 Testala con l’array [2, 13, 7, 21, 19] .*/
 
+const urlBook = `http://localhost:5001/books/`;
 
+const getFetch = async (url) => {
+  const res = await fetch(`${url}`);
+  const data = await res.json();
+  return data;
+};
+
+const ids = [2, 13, 7, 21, 19];
+
+async function getBooks(array) {
+  const libri = await Promise.all(array.map((id) => getFetch(`${urlBook}${id}`)));
+   return libri;
+}
+
+getBooks(ids)
+  .then((res) => console.log(res))
+  .catch((err) => err.message);
 
 
 /* Snack 6 (Bonus) - Ordina i libri
