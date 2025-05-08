@@ -75,13 +75,9 @@ const discountedBooks = availableBooks.map((b) => {
 console.log(discountedBooks);
 
 const fullPricedBook = discountedBooks.find((b) => {
-  if (
-    parseInt(b.price.replace(/[€\s]/g, "")) /
-      parseInt(b.price.replace(/[€\s]/g, "")) ===
-    1
-  ) {
-    return b;
-  }
+
+const price = parseFloat(b.price.replace('€', ""));
+return price % 1 === 0
 });
 console.log(fullPricedBook);
 
