@@ -137,20 +137,56 @@ const getFetch = async (url) => {
 const ids = [2, 13, 7, 21, 19];
 
 async function getBooks(array) {
-  const libri = await Promise.all(array.map((id) => getFetch(`${urlBook}${id}`)));
-   return libri;
+  const libri = await Promise.all(
+    array.map((id) => getFetch(`${urlBook}${id}`))
+  );
+  return libri;
 }
 
 getBooks(ids)
   .then((res) => console.log(res))
   .catch((err) => err.message);
 
-
 /* Snack 6 (Bonus) - Ordina i libri
-Crea una variabile booleana (areThereAvailableBooks) per verificare se c’è almeno un libro disponibile.
+Crea una variabile booleana (areThereAvailableBooks) per verificare 
+se c’è almeno un libro disponibile.
 Crea un array (booksByPrice) con gli elementi di books ordinati in base al prezzo (crescente).
-Ordina l’array booksByPricein base alla disponibilità (prima quelli disponibili), senza creare un nuovo array.*/
+Ordina l’array booksByPricein base alla disponibilità (prima quelli disponibili), 
+senza creare un nuovo array.*/
+
+const areThereAvailableBooks = books.some((b) => b.available == true);
+console.log(areThereAvailableBooks);
+
+const booksByPrice = books.sort((a, b) => {
+  a = parseInt(a.price.replace(/[€\s]/g, ""));
+  b = parseInt(b.price.replace(/[€\s]/g, ""));
+  return a - b;
+});
+console.log(booksByPrice);
+
+booksByPrice.sort((a, b) => {
+  if (a.available === true) {
+    return a - b;
+  }
+});
 
 /* Snack 7 (Bonus) - Analizza i tag
-Usa reduce per creare un oggetto (tagCounts) che conta quante volte ogni tag viene usato tra i libri.
+Usa reduce per creare un oggetto (tagCounts) 
+che conta quante volte ogni tag viene usato tra i libri.
 */
+
+const tagCounts = books.reduce((acc, libro) => {
+  return libro.tags.reduce((libroAcc, tag) => {
+    if (libroAcc[tag]) {
+      libroAcc[tag] += 1;
+    } else {
+      libroAcc[tag] = 1;
+    }
+    return libroAcc;
+  }, acc);
+}, {});
+
+console.log(
+  "Ecco una lista di tutti i tag e delle volte che sono stati usati:",
+  tagCounts
+);
